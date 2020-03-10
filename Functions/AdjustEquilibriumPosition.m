@@ -6,6 +6,7 @@ if nargin == 2
     % find offset
     linewidth = 1;
     PlotRawData(piezoPos,qpdVolts,linewidth);
+    title('Use cursor to select equilibrium point')
     [xoffset yoffset] = ginput(1);
 end
  

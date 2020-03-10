@@ -4,9 +4,11 @@ close all;
 clc;
 dirpath = fileparts(pwd);
 
-fc = 1374;
+% fc = 1374;
+fc = 421;
 strain2nm = 1415;
-disp = -16.6;
+% disp = -16.6;
+disp = -19;
 R = 0.6e-6;
 eta = 1.4e-3; 
 

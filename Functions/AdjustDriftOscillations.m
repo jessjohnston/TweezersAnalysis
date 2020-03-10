@@ -1,4 +1,5 @@
-function adjustPos = AdjustDriftOscillations(piezoPos2,qpdVolts2,driftInfo,fname,dirpath)
+function adjustPos = AdjustDriftOscillations(piezoPos2,qpdVolts2,...
+    driftInfo,fname,dirpath,dirpath_fig)
 close all;
 % load drift data
 [t piezo driftname driftData] = LoadDriftData(dirpath);
@@ -33,27 +34,45 @@ for i = 1:numData
         [a2 b2 rsqr2 resid2] = OLS(adjustPos{i},qpd);
         [a a2];
 
-        figure(1); clf; 
+        figure('Position',[0 0 1000 600]);
+        clf; 
         subplot(1,2,1); hold on; box on;
         plot(pos-pos(1)+posStart(i),qpd);
         plot(adjustPos{i},qpd,'r');
-        xlabel('piezo position (nm)','fontsize',20);
-        ylabel('qpd (V)','fontsize',20);
-        title(['R1=' num2str(rsqr) '; R2=' num2str(rsqr2)],'fontsize',16)
+        xlabel('Piezo position (nm)','fontsize',20);
+        ylabel('QPD voltage (V)','fontsize',20);
+        title(['R1 = ' num2str(rsqr) '; R2 = ' num2str(rsqr2)],'fontsize',16)
         set(gca,'fontsize',16);
         
         subplot(1,2,2); hold on; box on;
         start = find(t > timeStart(i),1,'first')+1;
         finish = find(t > timeFinish(i),1,'first')-1;
-        plot(t(start-offset:finish+offset),piezo(start-offset:finish+offset));
-        plot([t(start) t(start)],[min(piezo(start:finish))-10 max(piezo(start:finish))+10],'--k');
-        plot([t(finish) t(finish)],[min(piezo(start:finish))-10 max(piezo(start:finish))+10],'--k');
-        plot(t(start-offset:finish+offset),zeros(length(t(start-offset:finish+offset)),1),'--r');
+        if finish+offset <= length(t)
+            plot(t(start-offset:finish+offset),...
+                piezo(start-offset:finish+offset));
+            plot([t(start) t(start)],[min(piezo(start:finish))-10 ...
+                max(piezo(start:finish))+10],'--k');
+            plot([t(finish) t(finish)],[min(piezo(start:finish))-10 ...
+                max(piezo(start:finish))+10],'--k');
+            plot(t(start-offset:finish+offset),zeros(length(t(start-...
+                offset:finish+offset)),1),'--r');
+        elseif finish+offset > length(t)
+            plot(t(start-offset:finish),...
+                piezo(start-offset:finish));
+            plot([t(start) t(start)],[min(piezo(start:finish))-10 ...
+                max(piezo(start:finish))+10],'--k');
+            plot([t(finish) t(finish)],[min(piezo(start:finish))-10 ...
+                max(piezo(start:finish))+10],'--k');
+            plot(t(start-offset:finish),zeros(length(t(start-...
+                offset:finish)),1),'--r');
+        end
         axis tight;
-        xlabel('Time','fontsize',20);
-        ylabel('Drift positions','fontsize',20);
+        xlabel('Time (s)','fontsize',20);
+        ylabel('Drift position (nm)','fontsize',20);
         set(gca,'fontsize',16);
         title(['f = ' num2str(freq(i)) ' Hz']);
+        
+        suptitle('Use cursor on right plot to adjust oscillation span to maximally overlap plots on left; hit Enter when satisfied')
         
         [x1 y1 mouse] = ginput(1);
         if mouse == 1
@@ -69,7 +88,8 @@ for i = 1:numData
         end
     end
     
-    print('-djpeg',fullfile(dirpath,['DriftAdjusted_' fname{i}]));
+    fname_s = strrep(fname,'.txt','');
+    print('-dpng',fullfile(dirpath_fig,['DriftAdjusted_' fname_s{i}]));
 
 end
 

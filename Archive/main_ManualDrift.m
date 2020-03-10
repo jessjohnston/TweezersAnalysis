@@ -70,7 +70,7 @@ for i = 1:numData
     ylabel('QPD Volts','fontsize',25);
     title([num2str(freq(i)) ' Hz; slope = ' num2str(abs(a))],'fontsize',25);
     set(gca,'fontsize',20);
-    print('-djpeg',fullfile(dirpath,['Fit_' fname{i}]));
+    print('-djpeg',fullfile(dirpath,['RawFit_' fname{i}]));
    
     fprintf(fid,'%s\t%f\t%f\t%f\t%d\t%f\n',fname{i},freq(i),abs(a),rsqr,h,p);
 end
@@ -108,18 +108,18 @@ dispslope = FitDisplacementSlope(dirpath);
 
 
 % manually fit power spectrum
-[filename dirpath] = uigetfile(fullfile(dirpath,'*.txt'),'Select a power spectrum files','MultiSelect','on');
-data = dlmread(fullfile(dirpath,filename));
-sampling_f = 50000;
-nblock = 50;
-Lfit_start = 10;
-Lfit_end = 5000;
-[fc fcerror] = PowerSpectrumSingle(data,dirpath,sampling_f,nblock,Lfit_start,Lfit_end);
+[psfile pspath] = uigetfile(fullfile(dirpath,'*.txt'),'Select a power spectrum files','MultiSelect','on');
+data = dlmread(fullfile(pspath,psfile));
+sampling_f = 40000;
+nblock = 100;
+Lfit_start = 30;
+Lfit_end = 10000;
+[fc fcerror] = PowerSpectrumSingle(data,pspath,sampling_f,nblock,Lfit_start,Lfit_end);
 
 %%
 
-fc = 1500;
-dispslope = 16.6;
+fc = 1494;
+dispslope = 10.81;
 
 
 %%

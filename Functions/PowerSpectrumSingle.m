@@ -1,4 +1,5 @@
-function [fc fcerror] = PowerSpectrumSingle(data,dirpath,sampling_f,nblock,Lfit_start,Lfit_end)
+function [fc fcerror] = PowerSpectrumSingle(data,dirpath,dirpath_fig,...
+    sampling_f,nblock,Lfit_start,Lfit_end)
 
  
 % hydrodynamic drag parameters
@@ -22,11 +23,11 @@ xfin = fb(ind);
 yfin = Pb(ind);
 sfin = s(ind);
 % sfin = s(ind);
-xfin(1466)= [];
-yfin(1466) = [];
-sfin(1466) = [];
-fb_plot(1466) = [];
-Pb_plot(1466) = [];
+% xfin(1466)= [];
+% yfin(1466) = [];
+% sfin(1466) = [];
+% fb_plot(1466) = [];
+% Pb_plot(1466) = [];
 
 % initial guess of power spectrum fit
 p0 = FitInitialGuess(fb_plot,Pb_plot,fNyq); 
@@ -39,7 +40,7 @@ p0 = FitInitialGuess(fb_plot,Pb_plot,fNyq);
 figure(1); clf;
 PlotPowerSpectrum(fb_plot,Pb_plot); hold on;
 PlotFittedLorentzian(fb,Pb,nblock_plot,parameters,sigma_par,chi2,fNyq,hydroparam);
-print('-djpeg',fullfile(dirpath,'PowerSpectrum'));
+print('-dpng',fullfile(dirpath_fig,'PowerSpectrum'));
 
 % store values
 fc = parameters(1); 
