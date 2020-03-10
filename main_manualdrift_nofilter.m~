@@ -4,7 +4,7 @@
 % Run this section first, then proceed through each section in order.
 % Figures made in each section will be saved in separate 'Figures' folder.
 % Final corrected, converted force vs. extension data (for each
-% oscillation) will be saved to 'Fit.txt' file.
+% oscillation) will be saved to 'Fit.txt'
 
 clear all;
 close all;
@@ -12,7 +12,7 @@ clc;
 dirpath = fileparts(pwd);
 
 % Name of .mat file to save analysis data.
-dataFileName = '20200310_wt_6';
+dataFileName = '20180327_wt_2';
 
 % If you have already run this data set and done the 'point-picking', you
 % can set 'doManualAdjust' to FALSE; otherwise leave as TRUE to do
